@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.0.2
+  version: 0.0.3
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -191,7 +191,7 @@ paths:
           description: Bad request. Will be issued when the type is “name” but the “name”
             parameter is not contained in the request. Will also be issued if the type is
             “location” but either the “lat” or “lon” (or both) parameters are missing.
-  /departures:
+  /stationboard:
     get:
       summary: Retrieves departures for a station.
       parameters:
@@ -200,7 +200,7 @@ paths:
           type: integer #or do we need a string here?
           required: true
         - in: query
-          name: at
+          name: when
           type: string
           format: 'date-time'
           required: true
@@ -209,8 +209,16 @@ paths:
           type: string
           format: 'date-time'
           description: Limits the output by time. All departures between
-            at and until will be returned. If this parameter is omitted
+            when and until will be returned. If this parameter is omitted
             the API will return departures for the next 15 minutes.
+        - in: query
+          name: transportType
+          type: string
+          enum: [bus, express, ferry, regional, suburban, subway, tram]
+          required: false
+          description: Limits the output to departures of the given transport type
+            only. If this parameter is omitted departures for all transport types
+            will be returned.
       responses:
         200:
           description: OK
@@ -298,4 +306,4 @@ paths:
         401:
           description: Unauthorized.
             Will be returned by the server if the view parameter was set to
-            dashboard, but no user was logged in.
+            follows, but no user was logged in.
