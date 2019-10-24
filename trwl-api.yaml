@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.0.1
+  version: 0.0.2
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -19,6 +19,15 @@ definitions:
     type: integer #or do we need a string here?
   userId:
     type: integer #Do we even need this or is the username itself unique enough?
+  Coordinates:
+    type: object
+    properties:
+      lat:
+        type: number
+        format: float
+      lon:
+        type: number
+        format: float
   Departure:
     type: object
     properties:
@@ -26,6 +35,10 @@ definitions:
         $ref: '#/definitions/Transport'
       date:
         $ref: '#/definitions/TravelDate'
+  Polyline:
+    type: array
+    items:
+      $ref: '#/definitions/Coordinates'
   Station:
     type: object
     properties:
@@ -92,6 +105,8 @@ definitions:
       arrival:
         type: string
         format: 'date-time'
+      polyline:
+        $ref: '#/definitions/Polyline'
   User:
     type: object
     properties:
