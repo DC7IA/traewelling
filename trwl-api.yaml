@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.0.3
+  version: 0.0.4
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -295,10 +295,34 @@ paths:
           description: Filters the list of statuses so that it will either return the
             global view (i.e. all public statuses == global dashboard) or just the statuses
             of the current user’s follows (i.e. the user’s dashboard).
-        #TODO: This needs more parameters to narrow the list of returned statuses.
+        - in: query
+          name: aroundDate
+          type: string
+          format: 'date-time'
+          required: false
+          description: A timestamp around which is to be searched for statuses. If it is
+            omitted the current time at the server will be used.
+        - in: query
+          name: age
+          type: string
+          enum: [older, newer]
+          default: older
+          description: Determines if statuses that are older or newer than “aroundDate”
+            are to be returned.
+        - in: query
+          name: maxStatuses
+          type: integer
+          default: 20
+          #TODO: We should probably define a maximum.
+          description: Determines how many status objects will be returned at most in the
+            response. Must be an integer > 0.
       responses:
         200:
-          description: OK
+          description: OK.
+            The returned array may be empty, for example if the “aroundDate” parameter is
+            omitted (equalling it to server time) but the “age” parameter is set to “newer”.
+            The array may contain less than “maxStatuses” objects if not as many statuses
+            fulfill the given criteria.
           schema:
             type: array
             items:
@@ -307,3 +331,4 @@ paths:
           description: Unauthorized.
             Will be returned by the server if the view parameter was set to
             follows, but no user was logged in.
+            #TODO: Shall we enforce log in for the global dashboard? The website currently does that.
