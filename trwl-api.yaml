@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.0.4
+  version: 0.0.5
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -290,32 +290,36 @@ paths:
         - in: query
           name: view
           type: string
-          enum: [global, follows]
+          enum: [global, follows, enroute]
           default: global
           description: Filters the list of statuses so that it will either return the
-            global view (i.e. all public statuses == global dashboard) or just the statuses
-            of the current user’s follows (i.e. the user’s dashboard).
+            global view (i.e. all public statuses == global dashboard), just the statuses
+            of the current user’s follows (i.e. the user’s dashboard), or all statuses
+            which are currently en route.
         - in: query
           name: aroundDate
           type: string
           format: 'date-time'
           required: false
           description: A timestamp around which is to be searched for statuses. If it is
-            omitted the current time at the server will be used.
+            omitted the current time at the server will be used. This parameter will be
+            ignored if the “view” parameter is set to “enroute”, in which case the server
+            time will always be used.
         - in: query
           name: age
           type: string
           enum: [older, newer]
           default: older
           description: Determines if statuses that are older or newer than “aroundDate”
-            are to be returned.
+            are to be returned. This parameter will be ignored if the “view” parameter
+            is set to “enroute”, in which case “older” will always be used.
         - in: query
           name: maxStatuses
           type: integer
           default: 20
-          #TODO: We should probably define a maximum.
+          maximum: 50
           description: Determines how many status objects will be returned at most in the
-            response. Must be an integer > 0.
+            response. If this parameter is set it must be an integer > 0.
       responses:
         200:
           description: OK.
@@ -329,6 +333,5 @@ paths:
               $ref: '#/definitions/Status'
         401:
           description: Unauthorized.
-            Will be returned by the server if the view parameter was set to
-            follows, but no user was logged in.
-            #TODO: Shall we enforce log in for the global dashboard? The website currently does that.
+            Will be returned by the server if the “view” parameter was set to “global” or
+            “follows”, but no user was logged in.
