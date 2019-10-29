@@ -69,7 +69,8 @@ definitions:
       name:
         type: string
       type:
-        type: string #TODO: Do we need an enum here?
+        type: string
+        enum: [bus, business, express, ferry, private, regional, suburban, subway, tram]
       id:
         $ref: '#/definitions/transportId'
   TravelDate:
