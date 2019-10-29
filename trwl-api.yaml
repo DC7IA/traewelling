@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.0.5
+  version: 0.0.6
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -9,6 +9,10 @@ info:
 basePath: "/" #TODO: Need a final base path
 
 definitions:
+  arrivalId:
+    type: integer #or do we need a string here?
+  departureId:
+    type: integer #or do we need a string here?
   stationId:
     type: integer #or do we need a string here?
   statusId:
@@ -19,6 +23,15 @@ definitions:
     type: integer #or do we need a string here?
   userId:
     type: integer #Do we even need this or is the username itself unique enough?
+  Arrival:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/arrivalId'
+      station:
+        $ref: '#/definitions/Station'
+      date:
+        $ref: '#/definitions/TravelDate'
   Coordinates:
     type: object
     properties:
@@ -28,9 +41,11 @@ definitions:
       lon:
         type: number
         format: float
-  Departure:
+  Departure: #TODO: Rename since we use this type for both departures and arrivals
     type: object
     properties:
+      id:
+        $ref: '#/definitions/departureId'
       transport:
         $ref: '#/definitions/Transport'
       date:
@@ -232,6 +247,25 @@ paths:
             is given but it is not in the future (relative to the "at"
             parameter). Will also be issued if any of the required parameters
             are missing.
+  /stops:
+    get:
+      summary: Retrieves the stations and the arrival times along a transport line.
+      parameters:
+        - in: query
+          name: departureId
+          type: integer
+          description: The ID of a departure that was previously returned by the
+            “stationboard” route.
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Arrival'
+        404:
+          description: Not found.
+            The server does not know the given departureId.
   /user:
     get:
       summary: Retrieves information on a user.
