@@ -19,7 +19,7 @@ definitions:
     type: integer #or do we need a string here?
   transportId:
     type: integer #or do we need a string here?
-  tripId:
+  journeyId:
     type: integer #or do we need a string here?
   userId:
     type: integer #Do we even need this or is the username itself unique enough?
@@ -67,7 +67,7 @@ definitions:
       id:
         $ref: '#/definitions/statusId'
       trip:
-        $ref: '#/definitions/Trip'
+        $ref: '#/definitions/Journey'
       user:
         $ref: '#/definitions/User'
       statusText:
@@ -104,11 +104,11 @@ definitions:
         description: A delay in seconds.
           The value of this property should only be set and/or evaluated
           if the hasRealtime property is set to true.
-  Trip:
+  Journey:
     type: object
     properties:
       id:
-        $ref: '#/definitions/tripId'
+        $ref: '#/definitions/journeyId'
       start:
         $ref: '#/definitions/Station'
       end:
@@ -267,19 +267,19 @@ paths:
         404:
           description: Not found.
             The server does not know the given departureId.
-  /trip:
+  /journey:
     get:
-      summary: Makes a Trip out of a Departure and an Arrival.
+      summary: Makes a Journey out of a Departure and an Arrival.
       description: Takes a Departure, which uniquely identifies the start station and the
-        transport, and an Arrival to create a Trip for the User which they can then
+        transport, and an Arrival to create a Journey for the User which they can then
         check in to (i.e. by posting a Status).
-        The server stores this Trip for up to a day to allow for “offline check ins”. For
+        The server stores this Journey for up to a day to allow for “offline check ins”. For
         that purpose it remembers the exact time at which this Trip was created and by which
         User.
         This allows a belated Status to be posted by the app (e.g. in case of spotty cell
         reception) – the server would then still credit the full amount of points to the
         user if the timestamp of the Status and the internally stored timestamp for the
-        Trip fall into the +/- 20 minutes timeframe around the departure (see issue 105).
+        Journey fall into the +/- 20 minutes timeframe around the departure (see issue 105).
       parameters:
         - in: query
           name: departureId
@@ -297,7 +297,7 @@ paths:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/Trip'
+            $ref: '#/definitions/Journey'
         400:
           description: Bad request.
             The given arrivalId does not match up with the departureId (e.g. if the Arrival
