@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.2.0
+  version: 0.2.1
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -340,8 +340,10 @@ paths:
       parameters:
         - in: query
           name: userId
-          required: true
+          required: false
           type: integer
+          description: If this parameter is omitted the server returns the list of users
+            the currently logged in user is following.
       responses:
         200:
           description: OK
@@ -351,7 +353,7 @@ paths:
               $ref: '#/definitions/User'
         404:
           description: Not found.
-            There is no user with the given userId.
+            There is no user with the given userId in case a userId was given.
   /leaderboard:
     get:
       summary: Retrieves the top 20 users.
