@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.0.6
+  version: 0.0.7
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -254,6 +254,7 @@ paths:
         - in: query
           name: departureId
           type: integer
+          required: true
           description: The ID of a departure that was previously returned by the
             “stationboard” route.
       responses:
@@ -266,6 +267,44 @@ paths:
         404:
           description: Not found.
             The server does not know the given departureId.
+  /trip:
+    get:
+      summary: Makes a Trip out of a Departure and an Arrival.
+      description: Takes a Departure, which uniquely identifies the start station and the
+        transport, and an Arrival to create a Trip for the User which they can then
+        check in to (i.e. by posting a Status).
+        The server stores this Trip for up to a day to allow for “offline check ins”. For
+        that purpose it remembers the exact time at which this Trip was created and by which
+        User.
+        This allows a belated Status to be posted by the app (e.g. in case of spotty cell
+        reception) – the server would then still credit the full amount of points to the
+        user if the timestamp of the Status and the internally stored timestamp for the
+        Trip fall into the +/- 20 minutes timeframe around the departure (see issue 105).
+      parameters:
+        - in: query
+          name: departureId
+          type: integer
+          required: true
+          description: The ID of a Departure that was previously returned by the
+            “stationboard” route.
+        - in: query
+          name: arrivalId
+          type: integer
+          required: true
+          description: The ID of an Arrival that was previously returned by the “stops”
+            route using the same departureId given in this call.
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Trip'
+        400:
+          description: Bad request.
+            The given arrivalId does not match up with the departureId (e.g. if the Arrival
+            is not on the same transport line as the Departure).
+        404:
+          description: Not Found.
+            Either the departureId or the arrivalId were unknown to the server.
   /user:
     get:
       summary: Retrieves information on a user.
