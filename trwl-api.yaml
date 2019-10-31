@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.2.1
+  version: 0.3.0
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -320,6 +320,13 @@ paths:
     get:
       summary: Retrieves information on a user.
       parameters:
+        - in: header
+          name: If-Modified-Since
+          type: string
+          format: 'date-time'
+          required: false
+          description: If given it tells the server when the client has last requested this
+            resource. It allows the server to respond with a 304 answer thus reducing traffic.
         - in: query
           name: userId
           required: true
@@ -327,10 +334,22 @@ paths:
       responses:
         200:
           description: OK
+          headers:
+            Last-Modified:
+              description: The time and date when the object in the body was last modified on
+                the server. The client can use this information in a future request in the
+                If-Modified-Since header.
+              type: string
+              format: 'date-time'
           schema:
             type: array
             items:
               $ref: '#/definitions/User'
+        304:
+          description: Not modified.
+            The request contained an If-Modified-Since header and the requested object did
+            not change on the server since then. The body will be empty in this case since the
+            client already has the latest representation of this user.
         404:
           description: Not found.
             There is no user with the given userId.
@@ -338,6 +357,13 @@ paths:
     get:
       summary: Retrieves the list of users the given user is following.
       parameters:
+        - in: header
+          name: If-Modified-Since
+          type: string
+          format: 'date-time'
+          required: false
+          description: If given it tells the server when the client has last requested this
+            resource. It allows the server to respond with a 304 answer thus reducing traffic.
         - in: query
           name: userId
           required: false
@@ -347,10 +373,24 @@ paths:
       responses:
         200:
           description: OK
+          headers:
+            Last-Modified:
+              description: The time and date when the list of users contained in the body was
+                last modified on the server. This only means that the elements that make up the
+                array have changed. It does not tell the client if any of the properties
+                of the individual objects have or have not actually changed.
+              type: string
+              format: 'date-time'
           schema:
             type: array
             items:
               $ref: '#/definitions/User'
+        304:
+          description: Not modified.
+            The request contained an If-Modified-Since header and the requested list of users did
+            not change on the server since then. The body will be empty in this case since the
+            client already has the latest list of this user’s follows. However, the client should not
+            assume that the properties of any of the users haven’t changed.
         404:
           description: Not found.
             There is no user with the given userId in case a userId was given.
@@ -358,6 +398,13 @@ paths:
     get:
       summary: Retrieves the top 20 users.
       parameters:
+        - in: header
+          name: If-Modified-Since
+          type: string
+          format: 'date-time'
+          required: false
+          description: If given it tells the server when the client has last requested this
+            resource. It allows the server to respond with a 304 answer thus reducing traffic.
         - in: query
           name: orderBy
           type: string
@@ -366,10 +413,26 @@ paths:
       responses:
         200:
           description: OK
+          headers:
+            Last-Modified:
+              description: The time and date when the list of users contained in the body was
+                last modified on the server. This only means that the elements that make up the
+                array have changed. It does not tell the client if any of the properties
+                of the individual objects have or have not actually changed.
+              type: string
+              format: 'date-time'
           schema:
             type: array
             items:
               $ref: '#/definitions/User'
+        304:
+          description: Not modified.
+            The request contained an If-Modified-Since header and the requested list of users did
+            not change on the server since then. The body will be empty in this case since the
+            client already has the latest list of top 20 users for the given “orderBy” value. Note,
+            that either one of the “orderBy” representations of the leaderboard may have changed
+            since the If-Modified-Since date while the other one may have not. Also note, that the
+            client should not assume that the properties of any of the users haven’t changed.
   /statuses:
     get:
       tags: [Statuses]
