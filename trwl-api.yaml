@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.3.2
+  version: 0.3.3
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -353,6 +353,40 @@ paths:
         404:
           description: Not found.
             There is no user with the given userId.
+  /user/avatar:
+    put:
+      summary: Sets a new avatar image for the current user.
+      consumes:
+        - image/jpeg
+        - image/png
+      parameters:
+        - in: body
+          name: avatar
+          required: true
+          description: An image to be used as the new avatar for the current user.
+          schema:
+            type: string
+            format: binary
+      responses:
+        200: #TODO: Does a 204 make more sense? Or would we return the URL to the new avatar in the body? Or the user object even?
+          description: OK.
+            The avatar was successfully uploaded.
+  /user/name:
+    put:
+      summary: Updates the display name of the current user.
+      consumes:
+        - text/plain
+      parameters:
+        - in: body
+          name: displayName
+          required: true
+          description: The new display name to be used for the current user.
+          schema:
+            type: string
+      responses:
+        200: #TODO: Does a 204 make more sense? Or should we return the updated user object?
+          description: OK.
+            The displayName of the current user was changed.
   /follows:
     get:
       summary: Retrieves the list of users the given user is following.
