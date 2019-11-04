@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.3.1
+  version: 0.3.2
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -526,6 +526,8 @@ paths:
     put:
       tags: [Statuses]
       summary: Update a status that the current user had posted previously.
+      consumes:
+        - text/plain
       parameters:
         - in: path
           name: id
@@ -538,6 +540,7 @@ paths:
           description: The new status text to set in the status with the given ID.
           schema:
             type: string
+            maxLength: 280
       responses:
         200:
           description: OK.
