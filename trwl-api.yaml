@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.3.0
+  version: 0.3.1
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -159,7 +159,7 @@ definitions:
 
 tags:
   - name: "Statuses"
-    description: Query, add, and update statuses
+    description: Query, add, update, and delete statuses
   - name: "Check-in"
     description: Routes required to complete a full check-in workflow.
 
@@ -522,3 +522,48 @@ paths:
         404:
           description: Not found.
             A journey with the given ID is unknown to the server.
+  /status/{id}:
+    put:
+      tags: [Statuses]
+      summary: Update a status that the current user had posted previously.
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: The ID of the status to modify.
+        - in: body
+          name: "statusText"
+          required: true
+          description: The new status text to set in the status with the given ID.
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK.
+            The status object has been modified on the server (i.e. the status text was
+            changed). The response contains the modified version of the status.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Status'
+        404:
+          description: Not found.
+            The status objects in the request were valid, but the server did not know their id.
+    delete:
+      tags: [Statuses]
+      summary: Removes a status that the current user had posted previously.
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: The ID of the status to delete.
+      responses:
+        204:
+          description: No content.
+            The status with the given ID has been deleted. Nothing further needs to be said, so
+            the response will not have any content.
+        404:
+          description: Not found.
+            The server does not know a status with the given ID.
