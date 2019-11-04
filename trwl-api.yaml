@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.4.0
+  version: 0.5.0
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -11,6 +11,12 @@ servers:
   - url: "/" #TODO: Need a test server path
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     arrivalId:
       type: integer #or do we need a string here?
@@ -160,6 +166,11 @@ components:
           description: The points the user has earned.
 #TODO: Add missing objects and other data types here
 
+  responses:
+    UnauthorizedError:
+      description: Unauthorised.
+        The use of this particular route requires a JWT which is missing or invalid.
+
 tags:
   - name: "Statuses"
     description: Query, add, update, and delete statuses
@@ -171,6 +182,8 @@ tags:
 paths:
   /stations:
     get:
+      security:
+        - bearerAuth: []
       tags: [Check-in]
       summary: Retrieves a list of stations.
       description: This endpoint can be called multiple times in succession when searching
@@ -221,12 +234,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Station'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         400:
           description: Bad request. Will be issued when the type is “name” but the “name”
             parameter is not contained in the request. Will also be issued if the type is
             “location” but either the “lat” or “lon” (or both) parameters are missing.
   /stationboard:
     get:
+      security:
+        - bearerAuth: []
       tags: [Check-in]
       summary: Retrieves departures for a station.
       parameters:
@@ -267,6 +284,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Departure'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         400:
           description: Bad request. Will be issued if the "until" parameter
             is given but it is not in the future (relative to the "at"
@@ -274,6 +293,8 @@ paths:
             are missing.
   /stops:
     get:
+      security:
+        - bearerAuth: []
       tags: [Check-in]
       summary: Retrieves the stations and the arrival times along a transport line.
       parameters:
@@ -293,11 +314,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Arrival'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Not found.
             The server does not know the given departureId.
   /journey:
     get:
+      security:
+        - bearerAuth: []
       tags: [Check-in]
       summary: Makes a Journey out of a Departure and an Arrival.
       description: Takes a Departure, which uniquely identifies the start station and the
@@ -336,6 +361,8 @@ paths:
           description: Bad request.
             The given arrivalId does not match up with the departureId (e.g. if the Arrival
             is not on the same transport line as the Departure).
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Not Found.
             Either the departureId or the arrivalId were unknown to the server.
@@ -383,6 +410,8 @@ paths:
             There is no user with the given userId.
   /user/avatar:
     put:
+      security:
+        - bearerAuth: []
       tags: [User profile]
       summary: Sets a new avatar image for the current user.
       requestBody:
@@ -400,8 +429,12 @@ paths:
         200: #TODO: Does a 204 make more sense? Or would we return the URL to the new avatar in the body? Or the user object even?
           description: OK.
             The avatar was successfully uploaded.
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /user/name:
     put:
+      security:
+        - bearerAuth: []
       tags: [User profile]
       summary: Updates the display name of the current user.
       requestBody:
@@ -414,8 +447,12 @@ paths:
         200: #TODO: Does a 204 make more sense? Or should we return the updated user object?
           description: OK.
             The displayName of the current user was changed.
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /follows:
     get:
+      security:
+        - bearerAuth: []
       summary: Retrieves the list of users the given user is following.
       parameters:
         - in: header
@@ -457,6 +494,8 @@ paths:
             not change on the server since then. The body will be empty in this case since the
             client already has the latest list of this user’s follows. However, the client should not
             assume that the properties of any of the users haven’t changed.
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Not found.
             There is no user with the given userId in case a userId was given.
@@ -506,15 +545,19 @@ paths:
             client should not assume that the properties of any of the users haven’t changed.
   /statuses:
     get:
+      security:
+        - bearerAuth: []
       tags: [Statuses]
       summary: Retrieves a list of statuses.
+      description: This route will accept calls without a Bearer token in the HTTP header if
+        the “view” parameter is set to “enroute”.
       parameters:
         - in: query
           name: view
           schema:
             type: string
             enum: [global, follows, enroute]
-            default: global
+            default: enroute
           description: Filters the list of statuses so that it will either return the
             global view (i.e. all public statuses == global dashboard), just the statuses
             of the current user’s follows (i.e. the user’s dashboard), or all statuses
@@ -564,6 +607,8 @@ paths:
             Will be returned by the server if the “view” parameter was set to “global” or
             “follows”, but no user was logged in.
     post:
+      security:
+        - bearerAuth: []
       tags: [Statuses, Check-in]
       summary: Adds one or more new statuses for the current user.
       requestBody:
@@ -597,11 +642,15 @@ paths:
             The body of the request was somehow malformed. This could mean that e.g. required
             properties of a Status where missing. The server may provide details in an error
             message in the body of the response.
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Not found.
             A journey with the given ID is unknown to the server.
   /status/{id}:
     put:
+      security:
+        - bearerAuth: []
       tags: [Statuses]
       summary: Update a status that the current user had posted previously.
       requestBody:
@@ -629,10 +678,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Status'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Not found.
             The status objects in the request were valid, but the server did not know their id.
     delete:
+      security:
+        - bearerAuth: []
       tags: [Statuses]
       summary: Removes a status that the current user had posted previously.
       parameters:
@@ -647,6 +700,8 @@ paths:
           description: No content.
             The status with the given ID has been deleted. Nothing further needs to be said, so
             the response will not have any content.
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: Not found.
             The server does not know a status with the given ID.
