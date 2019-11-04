@@ -1,160 +1,163 @@
-swagger: "2.0"
+openapi: 3.0.0
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.3.3
+  version: 0.4.0
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
     url: "https://gitlab.com/HerrLevin_/trwl"
-basePath: "/" #TODO: Need a final base path
+servers:
+  - url: "/" #TODO: Need a production server path
+  - url: "/" #TODO: Need a test server path
 
-definitions:
-  arrivalId:
-    type: integer #or do we need a string here?
-  departureId:
-    type: integer #or do we need a string here?
-  stationId:
-    type: integer #or do we need a string here?
-  statusId:
-    type: integer #or do we need a string here?
-  transportId:
-    type: integer #or do we need a string here?
-  journeyId:
-    type: integer #or do we need a string here?
-  userId:
-    type: integer #Do we even need this or is the username itself unique enough?
-  Arrival:
-    type: object
-    properties:
-      id:
-        $ref: '#/definitions/arrivalId'
-      station:
-        $ref: '#/definitions/Station'
-      date:
-        $ref: '#/definitions/TravelDate'
-  Coordinates:
-    type: object
-    properties:
-      lat:
-        type: number
-        format: float
-      lon:
-        type: number
-        format: float
-  Departure: #TODO: Rename since we use this type for both departures and arrivals
-    type: object
-    properties:
-      id:
-        $ref: '#/definitions/departureId'
-      transport:
-        $ref: '#/definitions/Transport'
-      date:
-        $ref: '#/definitions/TravelDate'
-  Polyline:
-    type: array
-    items:
-      $ref: '#/definitions/Coordinates'
-  Station:
-    type: object
-    properties:
-      name:
-        type: string
-      id:
-        $ref: '#/definitions/stationId'
-  Status:
-    type: object
-    properties:
-      id:
-        $ref: '#/definitions/statusId'
-      journey:
-        $ref: '#/definitions/Journey'
-      user:
-        $ref: '#/definitions/User'
-      statusText:
-        type: string
-        maxLength: 280
-      timestamp:
-        type: integer
-        format: int64
-        description: The time of the check-in as a Unix timestamp.
-      likes:
-        type: integer
-  Transport:
-    type: object
-    properties:
-      name:
-        type: string
-      type:
-        type: string
-        enum: [bus, business, express, ferry, private, regional, suburban, subway, tram]
-      id:
-        $ref: '#/definitions/transportId'
-  TravelDate:
-    type: object
-    properties:
-      dateTime:
-        type: string
-        format: 'date-time'
-        description: The scheduled departure or arrival time of a transport.
-      hasRealtime:
-        type: boolean
-        description: Determines whether this object provides realtime data.
-          If it does, the value of the delay property should be evaluated.
-      delay:
-        type: integer
-        description: A delay in seconds.
-          The value of this property should only be set and/or evaluated
-          if the hasRealtime property is set to true.
-  Journey:
-    type: object
-    properties:
-      id:
-        $ref: '#/definitions/journeyId'
-      start:
-        $ref: '#/definitions/Station'
-      end:
-        $ref: '#/definitions/Station'
-      transport:
-        $ref: '#/definitions/Transport'
-      departure:
-        type: string
-        format: 'date-time'
-      arrival:
-        type: string
-        format: 'date-time'
-      polyline:
-        $ref: '#/definitions/Polyline'
-  User:
-    type: object
-    properties:
-      id:
-        $ref: '#/definitions/userId'
-      displayName:
-        type: string
-        description: A name that is solely used for display and not to identify the user
-          internally in the system. Can be changed by the user.
-      userName:
-        type: string
-        description: Uniquely identifies the user (a.k.a. their @-handle). Cannot be changed.
-      avatar:
-        type: string
-        description: A URL to an image representing the user’s avatar.
-      stats:
-        $ref: '#/definitions/UserStats'
-  UserStats:
-    type: object
-    properties:
-      distance:
-        type: number
-        format: float
-        description: The distance the user has travelled already given
-          in kilometres.
-      time:
-        type: integer
-        description: The time the user has spent travelling given in seconds.
-      points:
-        type: integer
-        description: The points the user has earned.
+components:
+  schemas:
+    arrivalId:
+      type: integer #or do we need a string here?
+    departureId:
+      type: integer #or do we need a string here?
+    stationId:
+      type: integer #or do we need a string here?
+    statusId:
+      type: integer #or do we need a string here?
+    transportId:
+      type: integer #or do we need a string here?
+    journeyId:
+      type: integer #or do we need a string here?
+    userId:
+      type: integer #Do we even need this or is the username itself unique enough?
+    Arrival:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/arrivalId'
+        station:
+          $ref: '#/components/schemas/Station'
+        date:
+          $ref: '#/components/schemas/TravelDate'
+    Coordinates:
+      type: object
+      properties:
+        lat:
+          type: number
+          format: float
+        lon:
+          type: number
+          format: float
+    Departure: #TODO: Rename since we use this type for both departures and arrivals
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/departureId'
+        transport:
+          $ref: '#/components/schemas/Transport'
+        date:
+          $ref: '#/components/schemas/TravelDate'
+    Polyline:
+      type: array
+      items:
+        $ref: '#/components/schemas/Coordinates'
+    Station:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          $ref: '#/components/schemas/stationId'
+    Status:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/statusId'
+        journey:
+          $ref: '#/components/schemas/Journey'
+        user:
+          $ref: '#/components/schemas/User'
+        statusText:
+          type: string
+          maxLength: 280
+        timestamp:
+          type: integer
+          format: int64
+          description: The time of the check-in as a Unix timestamp.
+        likes:
+          type: integer
+    Transport:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [bus, business, express, ferry, private, regional, suburban, subway, tram]
+        id:
+          $ref: '#/components/schemas/transportId'
+    TravelDate:
+      type: object
+      properties:
+        dateTime:
+          type: string
+          format: 'date-time'
+          description: The scheduled departure or arrival time of a transport.
+        hasRealtime:
+          type: boolean
+          description: Determines whether this object provides realtime data.
+            If it does, the value of the delay property should be evaluated.
+        delay:
+          type: integer
+          description: A delay in seconds.
+            The value of this property should only be set and/or evaluated
+            if the hasRealtime property is set to true.
+    Journey:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/journeyId'
+        start:
+          $ref: '#/components/schemas/Station'
+        end:
+          $ref: '#/components/schemas/Station'
+        transport:
+          $ref: '#/components/schemas/Transport'
+        departure:
+          type: string
+          format: 'date-time'
+        arrival:
+          type: string
+          format: 'date-time'
+        polyline:
+          $ref: '#/components/schemas/Polyline'
+    User:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/userId'
+        displayName:
+          type: string
+          description: A name that is solely used for display and not to identify the user
+            internally in the system. Can be changed by the user.
+        userName:
+          type: string
+          description: Uniquely identifies the user (a.k.a. their @-handle). Cannot be changed.
+        avatar:
+          type: string
+          description: A URL to an image representing the user’s avatar.
+        stats:
+          $ref: '#/components/schemas/UserStats'
+    UserStats:
+      type: object
+      properties:
+        distance:
+          type: number
+          format: float
+          description: The distance the user has travelled already given
+            in kilometres.
+        time:
+          type: integer
+          description: The time the user has spent travelling given in seconds.
+        points:
+          type: integer
+          description: The points the user has earned.
 #TODO: Add missing objects and other data types here
 
 tags:
@@ -162,6 +165,8 @@ tags:
     description: Query, add, update, and delete statuses
   - name: "Check-in"
     description: Routes required to complete a full check-in workflow.
+  - name: "User profile"
+    description: Routes for editing the current user’s profile.
 
 paths:
   /stations:
@@ -175,42 +180,47 @@ paths:
       parameters:
         - in: query
           name: findBy
-          type: string
-          enum: [name, location]
+          schema:
+            type: string
+            enum: [name, location]
           required: true
           description: Gets stations that match the given type.
         - in: query
           name: limit
-          type: integer
-          default: 10
+          schema:
+            type: integer
+            default: 10
           description: Limits the list of results to this amount.
         - in: query
           name: name
-          type: string
+          schema:
+            type: string
           description: A (partial) station name that shall be searched for. When calling
             this endpoint without explicit user confirmation (e.g. when trying to provide
             suggestions) provide at least 3 characters.
         - in: query
           name: lat
-          type: number
-          format: float
+          schema:
+            type: number
+            format: float
           description: The latitude part of the location to be searched around as a float.
             Positive values are in the northern hemisphere, negative in the south.
         - in: query
           name: lon
-          type: number
-          format: float
+          schema:
+            type: number
+            format: float
           description: The longitude part of the location to be searched around as a float.
             Positive values are in the eastern hemisphere, negative in the west.
-      produces:
-        - application/json
       responses:
         200:
           description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Station'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Station'
         400:
           description: Bad request. Will be issued when the type is “name” but the “name”
             parameter is not contained in the request. Will also be issued if the type is
@@ -222,24 +232,28 @@ paths:
       parameters:
         - in: query
           name: stationId
-          type: integer #or do we need a string here?
+          schema:
+            $ref: '#/components/schemas/stationId'
           required: true
         - in: query
           name: when
-          type: string
-          format: 'date-time'
+          schema:
+            type: string
+            format: 'date-time'
           required: true
         - in: query
           name: until
-          type: string
-          format: 'date-time'
+          schema:
+            type: string
+            format: 'date-time'
           description: Limits the output by time. All departures between
             when and until will be returned. If this parameter is omitted
             the API will return departures for the next 15 minutes.
         - in: query
           name: transportType
-          type: string
-          enum: [bus, express, ferry, regional, suburban, subway, tram]
+          schema:
+            type: string
+            enum: [bus, express, ferry, regional, suburban, subway, tram]
           required: false
           description: Limits the output to departures of the given transport type
             only. If this parameter is omitted departures for all transport types
@@ -247,10 +261,12 @@ paths:
       responses:
         200:
           description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Departure'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Departure'
         400:
           description: Bad request. Will be issued if the "until" parameter
             is given but it is not in the future (relative to the "at"
@@ -263,17 +279,20 @@ paths:
       parameters:
         - in: query
           name: departureId
-          type: integer
+          schema:
+            $ref: '#/components/schemas/departureId'
           required: true
           description: The ID of a departure that was previously returned by the
             “stationboard” route.
       responses:
         200:
           description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Arrival'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Arrival'
         404:
           description: Not found.
             The server does not know the given departureId.
@@ -294,21 +313,25 @@ paths:
       parameters:
         - in: query
           name: departureId
-          type: integer
+          schema:
+            $ref: '#/components/schemas/departureId'
           required: true
           description: The ID of a Departure that was previously returned by the
             “stationboard” route.
         - in: query
           name: arrivalId
-          type: integer
+          schema:
+            $ref: '#/components/schemas/arrivalId'
           required: true
           description: The ID of an Arrival that was previously returned by the “stops”
             route using the same departureId given in this call.
       responses:
         200:
           description: OK
-          schema:
-            $ref: '#/definitions/Journey'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journey'
         400:
           description: Bad request.
             The given arrivalId does not match up with the departureId (e.g. if the Arrival
@@ -322,15 +345,17 @@ paths:
       parameters:
         - in: header
           name: If-Modified-Since
-          type: string
-          format: 'date-time'
+          schema:
+            type: string
+            format: 'date-time'
           required: false
           description: If given it tells the server when the client has last requested this
             resource. It allows the server to respond with a 304 answer thus reducing traffic.
         - in: query
           name: userId
           required: true
-          type: integer
+          schema:
+            $ref: '#/components/schemas/userId'
       responses:
         200:
           description: OK
@@ -339,12 +364,15 @@ paths:
               description: The time and date when the object in the body was last modified on
                 the server. The client can use this information in a future request in the
                 If-Modified-Since header.
-              type: string
-              format: 'date-time'
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
+              schema:
+                type: string
+                format: 'date-time'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
         304:
           description: Not modified.
             The request contained an If-Modified-Since header and the requested object did
@@ -355,34 +383,33 @@ paths:
             There is no user with the given userId.
   /user/avatar:
     put:
+      tags: [User profile]
       summary: Sets a new avatar image for the current user.
-      consumes:
-        - image/jpeg
-        - image/png
-      parameters:
-        - in: body
-          name: avatar
-          required: true
-          description: An image to be used as the new avatar for the current user.
-          schema:
-            type: string
-            format: binary
+      requestBody:
+        content:
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+          image/png:
+            schema:
+              type: string
+              format: binary
+        description: An image to be used as the new avatar for the current user.
       responses:
         200: #TODO: Does a 204 make more sense? Or would we return the URL to the new avatar in the body? Or the user object even?
           description: OK.
             The avatar was successfully uploaded.
   /user/name:
     put:
+      tags: [User profile]
       summary: Updates the display name of the current user.
-      consumes:
-        - text/plain
-      parameters:
-        - in: body
-          name: displayName
-          required: true
-          description: The new display name to be used for the current user.
-          schema:
-            type: string
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        description: The new display name to be used for the current user.
       responses:
         200: #TODO: Does a 204 make more sense? Or should we return the updated user object?
           description: OK.
@@ -393,15 +420,17 @@ paths:
       parameters:
         - in: header
           name: If-Modified-Since
-          type: string
-          format: 'date-time'
+          schema:
+            type: string
+            format: 'date-time'
           required: false
           description: If given it tells the server when the client has last requested this
             resource. It allows the server to respond with a 304 answer thus reducing traffic.
         - in: query
           name: userId
           required: false
-          type: integer
+          schema:
+            $ref: '#/components/schemas/userId'
           description: If this parameter is omitted the server returns the list of users
             the currently logged in user is following.
       responses:
@@ -413,12 +442,15 @@ paths:
                 last modified on the server. This only means that the elements that make up the
                 array have changed. It does not tell the client if any of the properties
                 of the individual objects have or have not actually changed.
-              type: string
-              format: 'date-time'
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
+              schema:
+                type: string
+                format: 'date-time'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
         304:
           description: Not modified.
             The request contained an If-Modified-Since header and the requested list of users did
@@ -434,16 +466,18 @@ paths:
       parameters:
         - in: header
           name: If-Modified-Since
-          type: string
-          format: 'date-time'
+          schema:
+            type: string
+            format: 'date-time'
           required: false
           description: If given it tells the server when the client has last requested this
             resource. It allows the server to respond with a 304 answer thus reducing traffic.
         - in: query
           name: orderBy
-          type: string
-          enum: [points, distance]
-          default: points
+          schema:
+            type: string
+            enum: [points, distance]
+            default: points
       responses:
         200:
           description: OK
@@ -453,12 +487,15 @@ paths:
                 last modified on the server. This only means that the elements that make up the
                 array have changed. It does not tell the client if any of the properties
                 of the individual objects have or have not actually changed.
-              type: string
-              format: 'date-time'
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
+              schema:
+                type: string
+                format: 'date-time'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
         304:
           description: Not modified.
             The request contained an If-Modified-Since header and the requested list of users did
@@ -474,17 +511,19 @@ paths:
       parameters:
         - in: query
           name: view
-          type: string
-          enum: [global, follows, enroute]
-          default: global
+          schema:
+            type: string
+            enum: [global, follows, enroute]
+            default: global
           description: Filters the list of statuses so that it will either return the
             global view (i.e. all public statuses == global dashboard), just the statuses
             of the current user’s follows (i.e. the user’s dashboard), or all statuses
             which are currently en route.
         - in: query
           name: aroundDate
-          type: string
-          format: 'date-time'
+          schema:
+            type: string
+            format: 'date-time'
           required: false
           description: A timestamp around which is to be searched for statuses. If it is
             omitted the current time at the server will be used. This parameter will be
@@ -492,17 +531,19 @@ paths:
             time will always be used.
         - in: query
           name: age
-          type: string
-          enum: [older, newer]
-          default: older
+          schema:
+            type: string
+            enum: [older, newer]
+            default: older
           description: Determines if statuses that are older or newer than “aroundDate”
             are to be returned. This parameter will be ignored if the “view” parameter
             is set to “enroute”, in which case “older” will always be used.
         - in: query
           name: maxStatuses
-          type: integer
-          default: 20
-          maximum: 50
+          schema:
+            type: integer
+            default: 20
+            maximum: 50
           description: Determines how many status objects will be returned at most in the
             response. If this parameter is set it must be an integer > 0.
       responses:
@@ -512,10 +553,12 @@ paths:
             omitted (equalling it to server time) but the “age” parameter is set to “newer”.
             The array may contain less than “maxStatuses” objects if not as many statuses
             fulfill the given criteria.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Status'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
         401:
           description: Unauthorized.
             Will be returned by the server if the “view” parameter was set to “global” or
@@ -523,31 +566,32 @@ paths:
     post:
       tags: [Statuses, Check-in]
       summary: Adds one or more new statuses for the current user.
-      parameters:
-        - in: body
-          name: "body"
-          required: true
-          description: An array of statuses to add. The ID values of the statuses should all
-            be 0. They will be generated by the server. The “journey” object contained in a
-            status may be a skeleton consisting only of the ID and nothing more. The ID must
-            be valid. The “user” object should be omitted as the server will assume the
-            currently logged in user. If it is contained, it will be ignored. The “likes”
-            property of the status will be ignored by the server.
-          schema:
-            $ref: '#/definitions/Status'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Status'
+        description: An array of statuses to add. The ID values of the statuses should all
+          be 0. They will be generated by the server. The “journey” object contained in a
+          status may be a skeleton consisting only of the ID and nothing more. The ID must
+          be valid. The “user” object should be omitted as the server will assume the
+          currently logged in user. If it is contained, it will be ignored. The “likes”
+          property of the status will be ignored by the server.
       responses:
         201:
           description: Created
-          schema:
-            type: array
-            items:
-              type: object
-              properties:
-                points:
-                  type: integer
-                  description: The points credited to the current user for this particular status.
-                status:
-                  $ref: '#/definitions/Status'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    points:
+                      type: integer
+                      description: The points credited to the current user for this particular status.
+                    status:
+                      $ref: '#/components/schemas/Status'
         400:
           description: Bad request.
             The body of the request was somehow malformed. This could mean that e.g. required
@@ -560,30 +604,31 @@ paths:
     put:
       tags: [Statuses]
       summary: Update a status that the current user had posted previously.
-      consumes:
-        - text/plain
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+              maxLength: 280
+        description: The new status text to set in the status with the given ID.
       parameters:
         - in: path
           name: id
-          type: integer
+          schema:
+            $ref: '#/components/schemas/statusId'
           required: true
           description: The ID of the status to modify.
-        - in: body
-          name: "statusText"
-          required: true
-          description: The new status text to set in the status with the given ID.
-          schema:
-            type: string
-            maxLength: 280
       responses:
         200:
           description: OK.
             The status object has been modified on the server (i.e. the status text was
             changed). The response contains the modified version of the status.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Status'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
         404:
           description: Not found.
             The status objects in the request were valid, but the server did not know their id.
@@ -593,7 +638,8 @@ paths:
       parameters:
         - in: path
           name: id
-          type: integer
+          schema:
+            $ref: '#/components/schemas/statusId'
           required: true
           description: The ID of the status to delete.
       responses:
