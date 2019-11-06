@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   description: "This is the REST API for Träwelling."
-  version: 0.5.0
+  version: 0.5.1
   title: "TRWL app API"
   contact:
     name: "Träwelling Dev Team"
@@ -556,12 +556,12 @@ paths:
           name: view
           schema:
             type: string
-            enum: [global, follows, enroute]
+            enum: [global, follows, enroute, user]
             default: enroute
           description: Filters the list of statuses so that it will either return the
             global view (i.e. all public statuses == global dashboard), just the statuses
-            of the current user’s follows (i.e. the user’s dashboard), or all statuses
-            which are currently en route.
+            of the current user’s follows (i.e. the user’s dashboard), all statuses
+            which are currently en route, or the statuses of a certain user.
         - in: query
           name: aroundDate
           schema:
@@ -589,6 +589,12 @@ paths:
             maximum: 50
           description: Determines how many status objects will be returned at most in the
             response. If this parameter is set it must be an integer > 0.
+        - in: query
+          name: user
+          schema:
+            $ref: '#/components/schemas/userId'
+          description: Only required if the “view” parameter is set to “user”. If that is
+            the case this parameter takes the ID of the user to fetch statuses for.
       responses:
         200:
           description: OK.
