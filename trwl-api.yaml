@@ -543,21 +543,37 @@ paths:
             that either one of the “orderBy” representations of the leaderboard may have changed
             since the If-Modified-Since date while the other one may have not. Also note, that the
             client should not assume that the properties of any of the users haven’t changed.
+  /statuses/enroute/:
+    get:
+      tags: [Statuses]
+      summary: Retrieves a list of statuses.
+      responses:
+        200:
+          description: OK.
+            The returned array may be empty if there are no active statuses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Status'
+        401:
+          description: Unauthorized.
+            Will be returned by the server if the “view” parameter was set to “global” or
+            “follows”, but no user was logged in.
   /statuses:
     get:
       security:
         - bearerAuth: []
       tags: [Statuses]
       summary: Retrieves a list of statuses.
-      description: This route will accept calls without a Bearer token in the HTTP header if
-        the “view” parameter is set to “enroute”.
       parameters:
         - in: query
           name: view
           schema:
             type: string
-            enum: [global, follows, enroute, user]
-            default: enroute
+            enum: [global, follows, user]
+            default: global
           description: Filters the list of statuses so that it will either return the
             global view (i.e. all public statuses == global dashboard), just the statuses
             of the current user’s follows (i.e. the user’s dashboard), all statuses
