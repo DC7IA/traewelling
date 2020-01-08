@@ -216,6 +216,10 @@ Route::middleware(['auth', 'privacy'])->group(function() {
         'uses' => 'StatusController@exportCSV',
         'as'   => 'export.csv',
     ]);
+    Route::get('/exportICS/{username}', [
+        'uses' => 'StatusController@exportICS',
+        'as'   => 'export.ics',
+    ]);
 
     Route::post('/createfollow', [
         'uses' => 'FrontendUserController@CreateFollow',

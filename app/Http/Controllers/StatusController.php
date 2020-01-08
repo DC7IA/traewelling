@@ -7,7 +7,9 @@ use App\Like;
 use App\Status;
 use App\TrainCheckin;
 use App\TrainStations;
+use App\User;
 use Carbon\Carbon;
+use Eluceo\iCal\Component as Eluceo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -193,5 +195,42 @@ class StatusController extends Controller
             ->where("created_at", "<=", $date->copy()->endOfDay())
             ->first();
         return $q;
+    }
+
+    public static function exportICS(String $username) {
+        $user = User::where('username', '=', $username)->firstOrFail();
+
+        $vCalendar = new Eluceo\Calendar(route('account.show', ['username' => $username]));
+
+        $icsEvents = $user->statuses->map(function($status) use ($vCalendar) {
+            $trainCheckin = $status->trainCheckin;
+            $hafas = $trainCheckin->getHafasTrip()->first();
+            $origin = $trainCheckin->getOrigin()->first();
+            $destination = $trainCheckin->getDestination()->first();
+
+            $vEvent = new Eluceo\Event();
+            $vEvent
+                ->setCategories(config('APP_NAME'))
+                ->setCreated(new \DateTime($status->created_at))
+                ->setDtEnd(new \DateTime($trainCheckin->arrival))
+                ->setDtStart(new \DateTime($trainCheckin->departure))
+                ->setIsPrivate(false) /* Subject to change, once we have private trips */
+                ->setModified(new \DateTime($status->updated_at))
+                ->setSummary($hafas->linename . ' nach ' . $destination->name)
+                ->setUniqueId(url('/status/' . $status->id))
+                ->setLocation($origin->name)
+            ;
+            
+            $vCalendar->addComponent($vEvent);
+            return $vEvent;
+        });
+
+        $render = $vCalendar->render();
+
+        return Response::make($render, 200, [
+            'Content-type' => 'text/calendar',
+            'Content-Disposition' => 'attachment; filename="traewelling_export.ics"',
+            'Content-Length' => strlen($render)
+        ]);
     }
 }

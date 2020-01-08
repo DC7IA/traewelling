@@ -12,6 +12,7 @@
         "ext-json": "*",
         "abraham/twitteroauth": "^1.0",
         "doctrine/dbal": "^2.10",
+        "eluceo/ical": "^0.16.0",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "intervention/image": "^2.5",
