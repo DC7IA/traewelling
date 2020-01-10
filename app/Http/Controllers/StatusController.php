@@ -197,10 +197,18 @@ class StatusController extends Controller
         return $q;
     }
 
-    public static function exportICS(String $username) {
+    public static function exportICS(Request $request, String $username) {
         $user = User::where('username', '=', $username)->firstOrFail();
+        if($request->input('access_key') == null) {
+            abort(401); // Bad Request
+        }
+        if($request->input('access_key') != $user->receiveAccessKey()) {
+            abort(401);
+        }
 
-        $vCalendar = new Eluceo\Calendar(route('account.show', ['username' => $username]));
+        $vCalendar = new Eluceo\Calendar(route('export.ics', ['username' => $username]));
+        $vCalendar->setName(config('APP_NAME'));
+        $vCalendar->setDescription(__('export.ics.export-for', ['username' => $username]));
 
         $icsEvents = $user->statuses->map(function($status) use ($vCalendar) {
             $trainCheckin = $status->trainCheckin;

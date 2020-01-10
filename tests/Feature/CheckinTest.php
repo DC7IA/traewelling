@@ -87,7 +87,8 @@ class CheckinTest extends TestCase {
      * WHEN They check into the train
      * THEN They get flashed with information about the check-in 
      * THEN The user has one status noted.
-     * THEN You can see the status information.
+     * THEN You can see the status detail page.
+     * THEN The check-in appears in the ICS export.
      * @test
      */
     public function testCheckin() {
@@ -153,6 +154,13 @@ class CheckinTest extends TestCase {
         // THEN: You can get the status page and see its information
         $response = $this->get(url('/status/' . $statuses[0]->id));
         $response->assertOk();
+        $response->assertSee($stationname); // Departure Station
+        $response->assertSee($trip['stopovers'][0]['stop']['name']); // Arrival Station
+
+        // THEN: You can find the checkin in the ics export.
+        $response = $this->get(route('export.ics', ['username' => $user->username, 'access_key' => $user->receiveAccessKey()]));
+        $response->assertOk();
+        $response->assertHeader("content-type", "text/calendar; charset=UTF-8");
         $response->assertSee($stationname); // Departure Station
         $response->assertSee($trip['stopovers'][0]['stop']['name']); // Arrival Station
     }

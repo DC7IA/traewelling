@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -62,4 +63,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\Session');
     }
 
+    public function receiveAccessKey() {
+        $key = $this->ics_access_key;
+
+        if(empty($key)) {
+            $this->ics_access_key = Str::uuid();
+            $key = $this->ics_access_key->toString();
+            $this->save();
+        }
+        return $key;
+    }
 }
