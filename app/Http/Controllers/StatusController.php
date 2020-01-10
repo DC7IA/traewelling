@@ -224,7 +224,11 @@ class StatusController extends Controller
                 ->setDtStart(new \DateTime($trainCheckin->departure))
                 ->setIsPrivate(false) /* Subject to change, once we have private trips */
                 ->setModified(new \DateTime($status->updated_at))
-                ->setSummary($hafas->linename . ' nach ' . $destination->name)
+                ->setSummary(trans_choice(
+                    'export.ics.summary',
+                    preg_match('/\s/', $hafas->linename),
+                    ['lineName' => $hafas->linename, 'destination' => $destination->name]
+                ))
                 ->setUniqueId(url('/status/' . $status->id))
                 ->setLocation($origin->name, $origin->name, $origin->latitude . ',' . $origin->longitude)
             ;
