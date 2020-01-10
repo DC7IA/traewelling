@@ -88,11 +88,18 @@ class FrontendStatusController extends Controller
     }
 
     public function exportLanding() {
+        $user = Auth::user();
+        $key = $user->receiveAccessKey();
+
         return view('export')->with([
             'begin_of_month' => (new \DateTime("first day of this month"))
                 ->format("Y-m-d"),
             'end_of_month' => (new \DateTime("last day of this month"))
-                ->format("Y-m-d")
+                ->format("Y-m-d"),
+            'ics_link' => route('export.ics', [
+                'username' => $user->username,
+                'access_key' => $key
+            ])
         ]);
     }
 

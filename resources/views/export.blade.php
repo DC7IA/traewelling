@@ -8,20 +8,19 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <h1><i class="fa fa-save"></i> {{__('export.title')}}</h1>
-                <p class="lead">{{__('export.lead')}}</p>
-
-                <form method="GET" action="{{ route('export.csv') }}">
-                    @csrf
-                    <div class="card">
-                        <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        <h1><i class="fa fa-save"></i> {{__('export.title')}}</h1>
+                        <p>{{__('export.csv.lead')}}</p>
+                        <form method="GET" action="{{ route('export.csv') }}">
+                            @csrf
                             <div class="row">
                                 <div class="col">
-                                    <label for="begin">{{__('export.begin')}}</label>
+                                    <label for="begin">{{__('export.csv.begin')}}</label>
                                     <input name="begin" type="date" value="{{$begin_of_month}}" class="form-control">
                                 </div>
                                 <div class="col">
-                                    <label for="end">{{__('export.end')}}</label>
+                                    <label for="end">{{__('export.csv.end')}}</label>
                                     <input name="end" type="date" value="{{$end_of_month}}" class="form-control">
                                 </div>
                             </div>
@@ -30,12 +29,16 @@
                                 <input type="checkbox" class="custom-control-input" id="business-trips" name="business-trips" value="false" checked>
                                         
                                 <div class="col text-right">
-                                    <input type="submit" value="{{ __('export.submit') }}" class="btn btn-primary m-0">
+                                    <input type="submit" value="{{ __('export.csv.submit') }}" class="btn btn-primary m-0">
                                 </div>
                             </div>
-                        </div>
+                        </form>
+
+                        <h2 class="pt-4">{{ __('export.ics.title') }}</h2>
+                        <p>{!! __('export.ics.lead') !!}</p>
+                        <input type="text" class="form-control" value="{{ $ics_link }}" readonly>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
