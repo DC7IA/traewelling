@@ -218,7 +218,7 @@ class StatusController extends Controller
                 ->setModified(new \DateTime($status->updated_at))
                 ->setSummary($hafas->linename . ' nach ' . $destination->name)
                 ->setUniqueId(url('/status/' . $status->id))
-                ->setLocation($origin->name)
+                ->setLocation($origin->name, $origin->name, $origin->latitude . ',' . $origin->longitude)
             ;
             
             $vCalendar->addComponent($vEvent);
