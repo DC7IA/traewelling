@@ -3,24 +3,24 @@ return [
     "accepted" => ":attribute måste accepteras.",
     "active_url" => ":attribute är inte en korrekt URL.",
     "after" => ":attribute måste vara ett datum efter :date.",
-    "after_or_equal" => ":attribute måste vara ett datum efter eller på :date.",
+    "after_or_equal" => ":attribute måste vara ett datum på eller efter :date.",
     "alpha" => ":attribute kan bara innehålla bokstäver.",
     "alpha_dash" => ":attribute kan endast innehålla bokstäver, siffror och bindestreck.",
     "alpha_num" => ":attribute kan endast innehålla bokstäver och siffror.",
     "array" => ":attribute måste vara en lista.",
     "attributes" => [
         "email" => "e-postadress",
-        "name" => "name",
+        "name" => "namn",
         "password" => "lösenord",
         "password_confirmation" => "Lösenordsbekräftelse",
-        "remember" => "Zom ihåg inloggningsdata"
+        "remember" => "Kom ihåg inloggningsdata"
     ],
     "before" => ":attribute måste vara ett datum före :date.",
-    "before_or_equal" => ":attribute måste vara ett datum före eller på :date.",
+    "before_or_equal" => ":attribute måste vara ett datum på eller efter :date.",
     "between" => [
         "array" => ":attribute måste ha mellan :min och :max anteckningar.",
         "file" => ":attribute måste vara mellan :min och :max Kilobytes.",
-        "numeric" => ":attribute måste vara mellan :min und :max.",
+        "numeric" => ":attribute måste vara mellan :min och :max.",
         "string" => ":attribute måste vara mellan :min och :max tecken."
     ],
     "boolean" => ":attribute måste vara sant eller falskt.",
@@ -41,13 +41,13 @@ return [
     "filled" => ":attribute måste fyllas i..",
     "gt" => [
         "array" => ":attribute måste ha mer än :value element.",
-        "file" => ":attribute måste vara större än :value Kilobytes.",
+        "file" => ":attribute måste vara större än :value kilobyte.",
         "numeric" => ":attribute måste vara större än :value.",
         "string" => ":attribute måste vara mer än :value bokstäver."
     ],
     "gte" => [
         "array" => ":attribute måste ha minst :value element.",
-        "file" => ":attribute måste vara minst :value Kilobytes i storlek.",
+        "file" => ":attribute måste vara minst :value kilobyte i storlek.",
         "numeric" => ":attribute måste vara större än eller lika :value.",
         "string" => ":attribute måste vara minst :value bokstäver långa."
     ]
@@ -61,19 +61,19 @@ return [
     "json" => ":attribute måste vara en korrekt JSON-sträng..",
     "lt" => [
         "array" => ":attribute måste ha mindre än :value element.",
-        "file" => ":attribute måste vara mindre än :value Kilobytes.",
+        "file" => ":attribute måste vara mindre än :value kilobytes.",
         "numeric" => ":attribute måste vara mindre än :value",
         "string" => ":attribute måste vara kortare än :value bokstäver."
     ],
     "lte" => [
         "array" => ":attribute kan ha högst :value element.",
-        "file" => ":attribute kan vara högst :value Kilobytes.",
+        "file" => ":attribute kan vara högst :value kilobyte.",
         "numeric" => ":attribute måste vara mindre än eller lika med :value.",
         "string" => ":attribute kan vara högst :value bokstäver."
     ],
     "max" => [
         "array" => ":attribute kan inte innehåller mer än :max anteckningar.",
-        "file" => ":attribute kan inte vara större än :max Kilobytes.",
+        "file" => ":attribute kan inte vara större än :max kilobyte.",
         "numeric" => ":attribute kan inte vara större än :max.",
         "string" => ":attribute kan inte vara längre än :max tecken."
     ],
@@ -88,19 +88,19 @@ return [
     "not_in" => "Valt :attribute är felaktigt.",
     "not_regex" => ":attribute är felaktigt.",
     "numeric" => ":attribute måste vara ett nummer.",
-    "present" => ":attribute måste existerar.",
+    "present" => ":attribute måste existera.",
     "regex" => ":attribute formatet är felaktigt.",
     "required" => ":attribute fältet behövs.",
     "required_if" => ":attribute fält krävs om :other har ett värde på :value.",
     "required_unless" => ":attribute fält krävs förutom :other finns i värdena :values.",
     "required_with" => ":attribute fält krävs om :values existerar.",
     "required_with_all" => ":attribute fält krävs om :values existerar.",
-    "required_without" => ":attribute fält krävs om :values existerar inte.",
+    "required_without" => ":attribute fält krävs om :values inte existerar.",
     "required_without_all" => ":attribute fält krävs om ingen av värdena :values existerar.",
     "same" => ":attribute och :other måste vara lika.",
     "size" => [
         "array" => ":attribute måste innehåller :size anteckningar.",
-        "file" => ":attribute måste vaara :size Kilobytes stor.",
+        "file" => ":attribute måste vaara :size kilobyte stor.",
         "numeric" => ":attribute måste vara :size stor.",
         "string" => ":attribute måste vara :size tecken långa."
     ],
