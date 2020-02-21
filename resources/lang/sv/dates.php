@@ -1,0 +1,25 @@
+<?php
+return [
+    "-on-" => " på ",
+    "decimal_point" => ",",
+    "thousands_sep" => ".",
+    "April" => "April",
+    "August" => "Augusti",
+    "December" => "December",
+    "February" => "Februari",
+    "Friday" => "Fredag",
+    "January" => "Januari",
+    "July" => "Juli",
+    "June" => "Juni",
+    "March" => "Mars",
+    "May" => "Maj",
+    "Monday" => "Måndag",
+    "November" => "November",
+    "October" => "Oktober",
+    "Saturday" => "Lördag",
+    "September" => "September",
+    "Sunday" => "Söndag",
+    "Thursday" => "Torsdag",
+    "Tuesday" => "Tisdag",
+    "Wednesday" => "Onsdag"
+];
