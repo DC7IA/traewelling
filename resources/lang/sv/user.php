@@ -1,0 +1,26 @@
+<?php
+return [
+    "complete-registration" => "Avsluta registrering",
+    "displayname" => "Visningsnamn",
+    "email" => "e-postadress",
+    "email-verify" => "Bekräfta e-postadress",
+    "forgot-password" => "Glömt lösenord?",
+    "fresh-link" => "En ny bekräftelselänk har skickats till din e-postadress.",
+    "header-reset-pw" => "Återställ lösenord",
+    "login" => "Logga in",
+    "mastodon-instance-url" => "Instans",
+    "not-received-before" => "Om du inte fick e-postmeddelandet,",
+    "not-received-link" => "klicka här för en ny e-post",
+    "password" => "Lösenord",
+    "please-check" => "Innan du fortsätter ska du kontrollera din e-postadress för en bekräftelselänk.",
+    "register" => "Registrera",
+    "remember-me" => "Kom ihåg mig",
+    "reset-pw-link" => "Skicka återställningslänk",
+    "username" => "Användernamn",
+    "you" => "Du",
+    "home-set" => "Ditt hem är nu :Station.",
+    "always-dbl" => "Twittrar med #dbl?",
+    "liked-status" => "gillar den här statusen.",
+    "liked-own-status" => "gillar sin egen status.",
+    "invalid-mastodon" => ":domain verkar inte vara en Mastodon-instans."
+];
