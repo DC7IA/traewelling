@@ -10,7 +10,7 @@ return [
     "login" => "Logga in",
     "mastodon-instance-url" => "Instans",
     "not-received-before" => "Om du inte fick e-postmeddelandet,",
-    "not-received-link" => "klicka här för en ny e-post",
+    "not-received-link" => "klicka här för att skicka e-post igen",
     "password" => "Lösenord",
     "please-check" => "Innan du fortsätter ska du kontrollera din e-postadress för en bekräftelselänk.",
     "register" => "Registrera",
