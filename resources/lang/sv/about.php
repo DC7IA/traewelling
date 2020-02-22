@@ -1,6 +1,6 @@
 <?php
 return [
-    "basepoints" => "Basispunkte",
+    "basepoints" => "Baspoäng",
     "block1" => "Träwelling är en gratis check-in-tjänst du kan använda för att meddela dina vänner var du reser med kollektrafiken och för att ha en logbok. Kort sagt: Man kan checka in på tåg och får poäng för det.",
     "calculation" => "Avstånden blir avrundade uppåt till närmsta 10 km och dividerat med 10. Sedan blir basispoänger adderat.<br />En ICE resa med en längd av 143 km får du alltså <code>10 + avrundat uppåt(143/10) = 10 + 15 = 25</code>&nbsp;poäng, för en resa med pendeltåg (S-Bahn) med en längd av 8 km får du <code>2 + avrundat uppåt(8/10) = 2 + 1 = 3</code>&nbsp;poänger.
 
